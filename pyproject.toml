@@ -1,0 +1,73 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vmi-plus-ble"
+version = "0.1.0"
+description = "Bluetooth Low Energy client for Ventilairsec VMI+ / VMCI ventilation units"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "srThibaultP" }]
+requires-python = ">=3.12"
+dependencies = [
+    "bleak>=0.22",
+    "bleak-retry-connector>=3.5",
+]
+keywords = ["ventilairsec", "vmi", "vmc", "ventilation", "bluetooth", "ble", "home-assistant"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Home Automation",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/srThibaultP/vmi-plus-ble"
+Issues = "https://github.com/srThibaultP/vmi-plus-ble/issues"
+Protocol = "https://github.com/srThibaultP/ha-vmi-plus/blob/main/PROTOCOL.md"
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.11",
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=5",
+    "ruff>=0.6",
+]
+
+[project.scripts]
+vmi-plus-ble = "vmi_plus_ble.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vmi_plus_ble"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.coverage.report]
+fail_under = 95
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:", "raise NotImplementedError"]
+
+[tool.coverage.run]
+omit = ["src/vmi_plus_ble/__main__.py"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+files = ["src", "tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "PL", "ASYNC", "PT"]
+ignore = ["PLR2004", "PLR0911", "PLR0913"]
