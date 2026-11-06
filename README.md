@@ -55,7 +55,7 @@ The unit accepts **one connection at a time**: disconnect before using the offic
 | `set_summer_limit(°C)` | summer supply-air limit, 22–35 |
 | `set_preheat_target(°C)` | preheat target, 12–18, 0 = off |
 | `locate()` | blinks the LED |
-| `declare_new_filter(months)` | new filter (6 or 12 months), restarts the filter counter |
+| `declare_new_filter(months)` | new filter (6 or 12 months, sent to the unit as 26 or 52 weeks), restarts the filter counter |
 | `sync_clock()` | sets the unit's clock |
 
 Errors are raised as `VmiPlusConnectionError` or `VmiPlusTimeoutError` (both `VmiPlusError`).

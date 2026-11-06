@@ -18,6 +18,7 @@ from bleak_retry_connector import (
 from .const import (
     CHAR_CONTROL_UUID,
     CHAR_TELEMETRY_UUID,
+    FILTER_LIFESPAN_WEEKS,
     FILTER_LIFESPANS,
     PREHEAT_OFF,
     PREHEAT_TARGET_MAX,
@@ -184,7 +185,7 @@ class VmiPlusClient:
         """Declares a new filter; restarts the filter counter. Only after a real change."""
         if months not in FILTER_LIFESPANS:
             raise ValueError(f"filter lifespan must be one of {FILTER_LIFESPANS} months")
-        await self._write(Register.NEW_FILTER, months)
+        await self._write(Register.NEW_FILTER, FILTER_LIFESPAN_WEEKS[months])
 
     async def sync_clock(self, moment: datetime | None = None) -> None:
         """Sets the unit's clock (the app does it on every connection)."""

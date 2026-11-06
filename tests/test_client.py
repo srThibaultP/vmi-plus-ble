@@ -111,7 +111,8 @@ async def test_update(unit: FakeUnit, ble_device: BLEDevice) -> None:
         ("set_preheat_target", (0,), (0x1C, 0)),
         ("set_preheat_target", (16,), (0x1C, 16)),
         ("locate", (), (0x02, 0)),
-        ("declare_new_filter", (12,), (0x05, 12)),
+        ("declare_new_filter", (6,), (0x05, 26)),
+        ("declare_new_filter", (12,), (0x05, 52)),
     ],
 )
 async def test_commands(

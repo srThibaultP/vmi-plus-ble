@@ -70,6 +70,8 @@ PREHEAT_TARGET_MIN = 12
 PREHEAT_TARGET_MAX = 18
 PREHEAT_OFF = 0
 FILTER_LIFESPANS = (6, 12)
+# The unit reads the NewFilter value as weeks: 6 gave 42 days and 12 gave 84 days.
+FILTER_LIFESPAN_WEEKS = {6: 26, 12: 52}
 
 TIME_SLOT_DAYS = 7
 TIME_SLOTS_PER_DAY = 5
