@@ -94,6 +94,7 @@ SENSOR_KINDS = {
     0x03: "remote_control",
     0x04: "box",
     0x05: "nanosense",
+    0x08: "cov",
 }
 ROOMS = {
     0x00: "unknown",

@@ -78,6 +78,7 @@ class Sensor:
     kind: str
     temperature: int | None
     co2: int | None
+    voc: int | None
     humidity: int
     data_c: int
 
@@ -92,6 +93,11 @@ class Sensors:
     def remote_control(self) -> Sensor | None:
         """The remote control, which carries the room temperature and humidity."""
         return next((sensor for sensor in self.sensors if sensor.kind == "remote_control"), None)
+
+    @property
+    def air_quality(self) -> Sensor | None:
+        """The air-quality (VOC) sensor, when one is paired."""
+        return next((sensor for sensor in self.sensors if sensor.kind == "cov"), None)
 
 
 @dataclass(frozen=True, slots=True)

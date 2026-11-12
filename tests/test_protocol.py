@@ -195,6 +195,19 @@ def test_parse_co2_sensor() -> None:
     assert sensors.remote_control is None
 
 
+def test_parse_cov_sensor() -> None:
+    data = bytearray([0xA5, 0xB6, 0x02, 0x06, 0x0A]) + bytearray(10)
+    # id 4190284C, room bathroom_1, kind 0x08, VOC 56, humidity 61, temperature 20
+    data[5:15] = bytes([0x4C, 0x28, 0x90, 0x41, 0x03, 0x08, 56, 0x00, 61, 20])
+    sensors = parse_frame(bytes(data))
+    assert isinstance(sensors, Sensors)
+    sensor = sensors.air_quality
+    assert sensor is not None
+    assert (sensor.kind, sensor.room, sensor.id) == ("cov", "bathroom_1", "4190284C")
+    assert (sensor.voc, sensor.humidity, sensor.temperature, sensor.co2) == (56, 61, 20, None)
+    assert sensors.remote_control is None
+
+
 def test_parse_time_slots() -> None:
     slots = parse_frame(TIME_SLOTS)
     assert isinstance(slots, TimeSlots)

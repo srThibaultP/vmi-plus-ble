@@ -195,14 +195,20 @@ def _parse_sensors(data: bytes) -> Sensors:
         if kind == "absent" or data[offset : offset + 4] == bytes(4):
             continue
         is_co2 = kind == "nexelec_co2"
+        # The air-quality sensor (cov) carries its index at +6 and reports its
+        # own temperature at +9, where the other sensors keep the temperature.
+        is_cov = kind == "cov"
         sensors.append(
             Sensor(
                 slot=slot,
                 id=f"{_le(data[offset : offset + 4]):08X}",
                 room=ROOMS.get(data[offset + 4], "unknown"),
                 kind=kind,
-                temperature=None if is_co2 else _signed(data[offset + 6]),
+                temperature=_signed(data[offset + 9 if is_cov else offset + 6])
+                if not is_co2
+                else None,
                 co2=_le(data[offset + 6 : offset + 8]) if is_co2 else None,
+                voc=data[offset + 6] if is_cov else None,
                 humidity=data[offset + 8],
                 data_c=data[offset + 9],
             )
