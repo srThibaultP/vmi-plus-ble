@@ -23,6 +23,7 @@ from .const import (
     PREHEAT_OFF,
     PREHEAT_TARGET_MAX,
     PREHEAT_TARGET_MIN,
+    SENSOR_PERIODS,
     SUMMER_LIMIT_MAX,
     SUMMER_LIMIT_MIN,
     Register,
@@ -39,7 +40,13 @@ from .models import (
     TimeSlots,
     VmiPlusState,
 )
-from .protocol import build_command, build_date_frame, build_time_slot_frame, parse_frame
+from .protocol import (
+    build_command,
+    build_date_frame,
+    build_sensor_period_frame,
+    build_time_slot_frame,
+    parse_frame,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -186,6 +193,18 @@ class VmiPlusClient:
         if months not in FILTER_LIFESPANS:
             raise ValueError(f"filter lifespan must be one of {FILTER_LIFESPANS} months")
         await self._write(Register.NEW_FILTER, FILTER_LIFESPAN_WEEKS[months])
+
+    async def set_sensor_period(self, sensor_id: str, minutes: int) -> None:
+        """Sets how often a paired wireless sensor measures (10-50 minutes).
+
+        The unit cannot report the period back. Changing it restarts the VOC
+        sensor's measurement, which then needs about five periods to settle.
+        """
+        if minutes not in SENSOR_PERIODS:
+            raise ValueError(f"sensor period must be one of {SENSOR_PERIODS} minutes")
+        if len(sensor_id) != 8 or any(c not in "0123456789abcdefABCDEF" for c in sensor_id):
+            raise ValueError(f"invalid sensor id {sensor_id!r}")
+        await self._send(build_sensor_period_frame(sensor_id, minutes))
 
     async def sync_clock(self, moment: datetime | None = None) -> None:
         """Sets the unit's clock (the app does it on every connection)."""

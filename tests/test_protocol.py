@@ -18,7 +18,11 @@ from vmi_plus_ble import (
     build_command,
     parse_frame,
 )
-from vmi_plus_ble.protocol import build_date_frame, build_time_slot_frame
+from vmi_plus_ble.protocol import (
+    build_date_frame,
+    build_sensor_period_frame,
+    build_time_slot_frame,
+)
 
 STATUS = bytes.fromhex(
     "a5b601063778563412001fffffffff00012832026411c80001003c04000000"
@@ -111,6 +115,20 @@ def test_parse_status() -> None:
     assert status.box == "Urban"
     assert status.software_version == "6.4.002"
     assert (status.electronic_version, status.board_software_version) == (1, 1)
+
+
+def test_parse_status_urban_2_box() -> None:
+    data = bytearray(STATUS)
+    data[19] = 0x06  # the app shows housing "Urban 2"
+    status = parse_frame(bytes(data))
+    assert isinstance(status, Status)
+    assert status.box == "Urban 2"
+
+
+def test_build_sensor_period_frame() -> None:
+    # Frames captured from the official app for a VOC sensor, 10 then 30 minutes.
+    assert build_sensor_period_frame("4190284C", 10) == bytes.fromhex("a5b61c06054190284c0aa0")
+    assert build_sensor_period_frame("4190284C", 30) == bytes.fromhex("a5b61c06054190284c1eb4")
 
 
 def test_parse_status_version_nibbles() -> None:

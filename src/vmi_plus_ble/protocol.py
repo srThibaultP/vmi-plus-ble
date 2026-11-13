@@ -63,6 +63,14 @@ def build_command(register: int, value: int = 0) -> bytes:
     return build_frame(FrameClass.COMMAND, bytes([register, 0, 0, 0, value]))
 
 
+def build_sensor_period_frame(sensor_id: str, minutes: int) -> bytes:
+    """Builds the frame (class 0x1c) that sets a wireless sensor's measurement period.
+
+    The payload is the sensor id, big-endian, then the period in minutes.
+    """
+    return build_frame(FrameClass.SENSOR_PERIOD, bytes.fromhex(sensor_id) + bytes([minutes]))
+
+
 def build_time_slot_frame(day: int, slots: Sequence[TimeSlot]) -> bytes:
     """Builds a ConfigTimeSlot frame for one day (1 = Monday, up to 5 slots).
 

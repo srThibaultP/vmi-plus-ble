@@ -174,6 +174,18 @@ async def test_sync_clock(unit: FakeUnit, ble_device: BLEDevice) -> None:
     assert unit.written[-1][2] == 0x1A
 
 
+async def test_set_sensor_period(unit: FakeUnit, ble_device: BLEDevice) -> None:
+    client = VmiPlusClient(ble_device)
+    await client.set_sensor_period("4190284C", 30)
+    assert unit.written == [bytes.fromhex("a5b61c06054190284c1eb4")]
+    with pytest.raises(ValueError, match="period"):
+        await client.set_sensor_period("4190284C", 15)
+    with pytest.raises(ValueError, match="sensor id"):
+        await client.set_sensor_period("41902", 30)
+    with pytest.raises(ValueError, match="sensor id"):
+        await client.set_sensor_period("4190284Z", 30)
+
+
 async def test_timeout(unit: FakeUnit, ble_device: BLEDevice) -> None:
     unit.silent = True
     client = VmiPlusClient(ble_device, timeout=0.01)

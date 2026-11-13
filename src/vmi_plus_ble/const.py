@@ -25,10 +25,12 @@ class FrameClass(IntEnum):
     TIME_SLOT_STATE = 0x05
     ERP_STATE = 0x16
     BYPASS_STATE = 0x18
+    ACK = 0x23
     # App -> unit
     COMMAND = 0x10
     CONFIG_TIME_SLOT = 0x19
     UPDATE_DATE = 0x1A
+    SENSOR_PERIOD = 0x1C
 
 
 class Register(IntEnum):
@@ -79,7 +81,7 @@ EMPTY_SLOT_START = 0xFF
 NO_SLOT_TEMPERATURE = 0xFF
 
 SEASONS = {0x00: "summer", 0x01: "winter", 0x02: "intermediate"}
-BOXES = {0x01: "Purevent", 0x02: "Urban", 0x03: "PRO", 0x05: "Cube"}
+BOXES = {0x01: "Purevent", 0x02: "Urban", 0x03: "PRO", 0x05: "Cube", 0x06: "Urban 2"}
 PREHEAT_TYPES = {
     0x01: "electric",
     0x02: "solar",
@@ -108,3 +110,5 @@ ROOMS = {
     0x08: "bedroom_4",
     0x09: "cellar",
 }
+# Measurement periods (minutes) a wireless sensor accepts (frame class 0x1c).
+SENSOR_PERIODS = (10, 20, 30, 40, 50)

@@ -57,6 +57,7 @@ The unit accepts **one connection at a time**: disconnect before using the offic
 | `locate()` | blinks the LED |
 | `declare_new_filter(months)` | new filter (6 or 12 months, sent to the unit as 26 or 52 weeks), restarts the filter counter |
 | `sync_clock()` | sets the unit's clock |
+| `set_sensor_period(sensor_id, minutes)` | measurement period of a paired wireless sensor (10, 20, 30, 40 or 50 minutes); write-only, and it restarts a VOC sensor's measurement |
 
 Errors are raised as `VmiPlusConnectionError` or `VmiPlusTimeoutError` (both `VmiPlusError`).
 Factory reset, firmware update and after-sales commands are deliberately not implemented.
