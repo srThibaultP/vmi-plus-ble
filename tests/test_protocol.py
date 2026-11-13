@@ -111,6 +111,14 @@ def test_parse_status() -> None:
     assert status.box == "Urban"
     assert status.software_version == "6.4.002"
     assert (status.electronic_version, status.board_software_version) == (1, 1)
+
+
+def test_parse_status_version_nibbles() -> None:
+    data = bytearray(STATUS)
+    data[21] = 0x12  # the app shows electronic version 2, software version 1
+    status = parse_frame(bytes(data))
+    assert isinstance(status, Status)
+    assert (status.electronic_version, status.board_software_version) == (2, 1)
     assert status.mechanical_version == 1
     assert status.volume == 200
     assert status.surface == 80
